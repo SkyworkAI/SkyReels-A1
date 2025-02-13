@@ -1,0 +1,5 @@
+The landmark file defines the barycentric embedding of 105 points of the Mediapipe mesh in the surface of FLAME.
+In consists of three arrays: lmk_face_idx, lmk_b_coords, and landmark_indices.
+- lmk_face_idx contains for every landmark the index of the FLAME triangle which each landmark is embedded into
+- lmk_b_coords are the barycentric weights for each vertex of the triangles
+- landmark_indices are the indices of the vertices of the Mediapipe mesh
