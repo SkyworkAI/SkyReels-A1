@@ -76,7 +76,7 @@ If the script runs successfully, you will get an output mp4 file. This file incl
 
 
 ### 4. Gradio interface 🤗
-We also provide a Gradio interface for a better experience, just run by:
+We provide a Gradio interface for a better experience, just run by:
 
 ```bash
 python app.py
@@ -85,17 +85,19 @@ python app.py
 ![gradio](https://github.com/user-attachments/assets/ed56f08c-f31c-4fbe-ac1d-c4d4e87a8719)
 
 
+### 5. Metric evaluatio 👓
 
+We also provide all scripts for automatically calculating performance metrics in the paper, which can be found in the eval folder.
 
 ## Acknowledgements 💐
-We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/CogVideo) repositories, for their open research and contributions. 
+We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/CogVideo) and [finetrainers](https://github.com/a-r-r-o-w/finetrainers) repositories, for their open research and contributions. 
 
 ## Citation 💖
 If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and cite our work using the following BibTeX:
 ```bibtex
 @article{qiu2025skyreels,
   title   = {SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers},
-  author  = {},
+  author  = {Qiu, Di and Zhengcong, Fei, and so on},
   journal = {arXiv preprint arXiv},
   year    = {2025}
 }
