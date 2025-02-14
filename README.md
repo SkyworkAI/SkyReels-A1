@@ -24,7 +24,7 @@
   <a href='https://arxiv.org/'><img src='https://img.shields.io/badge/arXiv-SkyReels A1-red'></a>
   <a href='https://skyworkai.github.io/skyreels-a1.github.io/'><img src='https://img.shields.io/badge/Project-SkyReels A1-green'></a>
   <a href='https://huggingface.co/Skywork/SkyReels-A1'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
-  <a href='https://huggingface.co/spaces'>https://huggingface.co/Skywork/SkyReels-A1<img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a>
+  <a href='https://www.skyreels.ai/home'><img src='https://img.shields.io/badge/Playground-Spaces-yellow'></a>
   <br>
 </div>
 <br>
