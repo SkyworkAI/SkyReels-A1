@@ -66,6 +66,26 @@ You can download the pretrained weights is from HuggingFace:
 huggingface-cli download SkyReels-A1 --local-dir local_path --exclude "*.git*" "README.md" "docs"
 ```
 
+The directory structure of our SkyReels-A1 code is formulated as: 
+```text
+pretrained_weights
+├── FLAME
+├── SkyReels-A1-5B
+│   ├── pose_guider
+│   ├── scheduler
+│   ├── tokenizer
+│   ├── siglip-so400m-patch14-384
+│   ├── transformer
+│   ├── vae
+│   └── text_encoder
+├── mediapipe
+└── smirk
+
+```
+
+
+
+
 
 ### 3. Inference 🚀
 You can simply run the inference scripts as: 
