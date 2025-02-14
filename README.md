@@ -23,7 +23,8 @@
   <!-- <a href='LICENSE'><img src='https://img.shields.io/badge/license-MIT-yellow'></a> -->
   <a href='https://arxiv.org/'><img src='https://img.shields.io/badge/arXiv-SkyReels A1-red'></a>
   <a href='https://skyworkai.github.io/skyreels-a1.github.io/'><img src='https://img.shields.io/badge/Project-SkyReels A1-green'></a>
-  <a href='https://huggingface.co/spaces'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a>
+  <a href='https://huggingface.co/Skywork/SkyReels-A1'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
+  <a href='https://huggingface.co/spaces'>https://huggingface.co/Skywork/SkyReels-A1<img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'></a>
   <br>
 </div>
 <br>
@@ -62,7 +63,7 @@ pip install -r requirements.txt
 You can download the pretrained weights is from HuggingFace:
 ```bash
 # !pip install -U "huggingface_hub[cli]"
-huggingface-cli download SkyReels-A1-5B --local-dir local_path --exclude "*.git*" "README.md" "docs"
+huggingface-cli download SkyReels-A1 --local-dir local_path --exclude "*.git*" "README.md" "docs"
 ```
 
 
