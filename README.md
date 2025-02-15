@@ -93,9 +93,9 @@ python inference.py
 If the script runs successfully, you will get an output mp4 file. This file includes the following results: driving video, input image or video, and generated result.
 
 
-## Gradio interface 🤗
+## Gradio Interface 🤗
 
-We provide a Gradio interface for a better experience, just run by:
+We provide a [Gradio](https://huggingface.co/docs/hub/spaces-sdks-gradio) interface for a better experience, just run by:
 
 ```bash
 python app.py
@@ -106,9 +106,18 @@ The graphical interactive interface is shown as below:
 ![gradio](https://github.com/user-attachments/assets/ed56f08c-f31c-4fbe-ac1d-c4d4e87a8719)
 
 
-## Metric evaluatio 👓
+## Metric Evaluation 👓
 
-We also provide all scripts for automatically calculating the metrics reported in the paper, which can be found in the eval folder.
+We also provide all scripts for automatically calculating the metrics, including SimFace, FID, and L1 distance between expression and motion, reported in the paper.  
+
+All codes can be found in the ```eval``` folder. After setting the video result path, run the following commands in sequence: 
+
+```bash
+python arc_score.py
+python expression_score.py
+python pose_score.py
+```
+
 
 ## Acknowledgements 💐
 We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/CogVideo) and [finetrainers](https://github.com/a-r-r-o-w/finetrainers) repositories, for their open research and contributions. 
