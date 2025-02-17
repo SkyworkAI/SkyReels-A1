@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/logo.png" alt="Skyreels Logo" width="50%">
+</p>
+
+
 <h1 align="center">SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers</h1>
 <div align='center'>
     <a href='https://scholar.google.com/citations?user=6D_nzucAAAAJ&hl=en' target='_blank'><strong>Di Qiu</strong></a>&emsp;
@@ -39,6 +44,10 @@
 
 This repo, named **SkyReels-A1**, contains the official PyTorch implementation of our paper [SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers](https://arxiv.org).
 
+
+## 🔥🔥🔥 News!!
+* Feb 18, 2025: 👋 We release the inference code and model weights of Skyreels-A1. [Download](https://huggingface.co/Skywork/SkyReels-A1)
+* Feb 18, 2025: 🎉 We have made our technical report available as open source. [Read](https://skyworkai.github.io/skyreels-a1.github.io/report.pdf)
 
 
 ## Getting Started 🏁 
