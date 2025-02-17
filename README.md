@@ -9,8 +9,8 @@
 
 <div align='center'>
   <a href='https://scholar.google.com.au/citations?user=ePIeVuUAAAAJ&hl=en' target='_blank'><strong>Mingyuan Fan</strong></a>&emsp;
-  <a target='_blank'><strong>Guibin Chen</strong></a>&emsp;
-  <a target='_blank'><strong>Xiang Wen</strong></a>&emsp;
+  <a href='https://scholar.google.com/citations?user=HukWSw4AAAAJ&hl=en' target='_blank'><strong>Guibin Chen</strong></a>&emsp;
+  <a href='https://scholar.google.com.tw/citations?user=RvAuMk0AAAAJ&hl=zh-CN' target='_blank'><strong>Xiang Wen</strong></a>&emsp;
 </div>
 
 <div align='center'>
