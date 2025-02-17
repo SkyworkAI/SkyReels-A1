@@ -46,7 +46,7 @@ This repo, named **SkyReels-A1**, contains the official PyTorch implementation o
 
 
 ## 🔥🔥🔥 News!!
-* Feb 18, 2025: 👋 We release the inference code and model weights of Skyreels-A1. [Download](https://huggingface.co/Skywork/SkyReels-A1)
+* Feb 18, 2025: 👋 We release the inference code and model weights of SkyReels-A1. [Download](https://huggingface.co/Skywork/SkyReels-A1)
 * Feb 18, 2025: 🎉 We have made our technical report available as open source. [Read](https://skyworkai.github.io/skyreels-a1.github.io/report.pdf)
 
 
