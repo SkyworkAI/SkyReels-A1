@@ -26,7 +26,7 @@
 
 <div align="center">
   <!-- <a href='LICENSE'><img src='https://img.shields.io/badge/license-MIT-yellow'></a> -->
-  <a href='https://arxiv.org/'><img src='https://img.shields.io/badge/arXiv-SkyReels A1-red'></a>
+  <a href='https://arxiv.org/abs/2502.10841'><img src='https://img.shields.io/badge/arXiv-SkyReels A1-red'></a>
   <a href='https://skyworkai.github.io/skyreels-a1.github.io/'><img src='https://img.shields.io/badge/Project-SkyReels A1-green'></a>
   <a href='https://huggingface.co/Skywork/SkyReels-A1'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-blue'></a>
   <a href='https://www.skyreels.ai/home'><img src='https://img.shields.io/badge/Playground-Spaces-yellow'></a>
@@ -134,11 +134,14 @@ We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/
 ## Citation 💖
 If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and cite our work using the following BibTeX:
 ```bibtex
-@article{qiu2025skyreels,
-  title   = {SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers},
-  author  = {Qiu, Di and Zhengcong, Fei, and so on},
-  journal = {arXiv preprint arXiv},
-  year    = {2025}
+@misc{qiu2025skyreelsa1expressiveportraitanimation,
+      title={SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers}, 
+      author={Di Qiu and Zhengcong Fei and Rui Wang and Jialin Bai and Changqian Yu and Mingyuan Fan and Guibin Chen and Xiang Wen},
+      year={2025},
+      eprint={2502.10841},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2502.10841}, 
 }
 ```
 
