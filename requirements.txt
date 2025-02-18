@@ -13,7 +13,7 @@ opencv_python_headless==4.10.0.84
 Pillow==11.1.0
 pytorch3d.egg==info
 safetensors==0.5.2
-skimage==0.0
+skimage==0.24.0
 timm==0.6.13
 torch==2.2.2+cu118
 tqdm==4.66.2
