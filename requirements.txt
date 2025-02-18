@@ -1,6 +1,6 @@
 chumpy==0.70
 decord==0.6.0
-diffusers==0.32.0.dev0
+diffusers==0.32.2
 einops==0.8.1
 facexlib==0.3.0
 gradio==5.16.0
