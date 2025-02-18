@@ -11,7 +11,7 @@ opencv_contrib_python==4.10.0.84
 opencv_python==4.10.0.84
 opencv_python_headless==4.10.0.84
 Pillow==11.1.0
-pytorch3d.egg==info
+pytorch3d==0.7.8
 safetensors==0.5.2
 skimage==0.24.0
 timm==0.6.13
