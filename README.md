@@ -75,6 +75,8 @@ You can download the pretrained weights is from HuggingFace:
 huggingface-cli download SkyReels-A1 --local-dir local_path --exclude "*.git*" "README.md" "docs"
 ```
 
+The FLAME, mediapipe, and smirk models are located in the SkyReels-A1/extra_models folder.
+
 The directory structure of our SkyReels-A1 code is formulated as: 
 ```text
 pretrained_weights
