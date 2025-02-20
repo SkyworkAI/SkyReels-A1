@@ -139,7 +139,7 @@ def main():
     print(img_list)
     print(video_list[0]) 
 
-    model_path = "/maindata/data/shared/public/zhengcong.fei/ckpts/cogvideox1.5/consistent_id" 
+    model_path = "eval" 
     face_arc_path = os.path.join(model_path, "face_encoder")
     face_cur_path = os.path.join(face_arc_path, "glint360k_curricular_face_r101_backbone.bin") 
 
