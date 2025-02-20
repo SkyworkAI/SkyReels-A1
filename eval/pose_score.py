@@ -541,7 +541,7 @@ def calculate_pose(list1, list2):
         return 0.
 
 def main(): 
-    body_estimation = Body('ckpts/body_pose_model.pth')
+    body_estimation = Body('eval/pose/body_pose_model.pth')
 
     device = "cuda" 
     data_path = "data/SkyActor" 
