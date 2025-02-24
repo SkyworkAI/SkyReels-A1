@@ -57,10 +57,12 @@ def parse_video(driving_video_path, max_frame_num):
     control_frames = vr.get_batch(frame_indices).asnumpy()[:(max_frame_num-1)]
     
     out_frames = len(control_frames) - 1
-    if  len(control_frames) < max_frame_num:
-        video_lenght_add =  max_frame_num - len(control_frames)
-    control_frames = np.concatenate(([control_frames[0]]*2, control_frames[1:len(control_frames)-2], [control_frames[-1]] * video_lenght_add), axis=0)
-
+    if  len(control_frames) < max_frame_num - 1:
+        video_lenght_add =  max_frame_num - len(control_frames) - 1
+        control_frames = np.concatenate(([control_frames[0]]*2, control_frames[1:len(control_frames)-1], [control_frames[-1]] * video_lenght_add), axis=0)
+    else:
+        control_frames = np.concatenate(([control_frames[0]]*2, control_frames[1:len(control_frames)-1]), axis=0)
+    
     return control_frames
 
 def exec_cmd(cmd):
