@@ -5,21 +5,21 @@
 
 <h1 align="center">SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers</h1>
 <div align='center'>
-    <a href='https://scholar.google.com/citations?user=6D_nzucAAAAJ&hl=en' target='_blank'><strong>Di Qiu</strong></a>&emsp;
-    <a href='https://scholar.google.com/citations?user=_43YnBcAAAAJ&hl=zh-CN' target='_blank'><strong>Zhengcong Fei</strong></a>&emsp;
-    <a target='_blank'><strong>Rui Wang</strong></a>&emsp;
-    <a target='_blank'><strong>Jialin Bai</strong></a>&emsp;
-    <a href='https://scholar.google.com/citations?user=Hv-vj2sAAAAJ&hl=en' target='_blank'><strong>Changqian Yu</strong></a>&emsp;
+    <a href='https://scholar.google.com/citations?user=6D_nzucAAAAJ&hl=en' target='_blank'>Di Qiu</a>&emsp;
+    <a href='https://scholar.google.com/citations?user=_43YnBcAAAAJ&hl=zh-CN' target='_blank'>Zhengcong Fei</a>&emsp;
+    <a href='' target='_blank'>Rui Wang</a>&emsp;
+    <a href='' target='_blank'>Jialin Bai</a>&emsp;
+    <a href='https://scholar.google.com/citations?user=Hv-vj2sAAAAJ&hl=en' target='_blank'>Changqian Yu</a>&emsp;
 </div>
 
 <div align='center'>
-  <a href='https://scholar.google.com.au/citations?user=ePIeVuUAAAAJ&hl=en' target='_blank'><strong>Mingyuan Fan</strong></a>&emsp;
-  <a href='https://scholar.google.com/citations?user=HukWSw4AAAAJ&hl=en' target='_blank'><strong>Guibin Chen</strong></a>&emsp;
-  <a href='https://scholar.google.com.tw/citations?user=RvAuMk0AAAAJ&hl=zh-CN' target='_blank'><strong>Xiang Wen</strong></a>&emsp;
+  <a href='https://scholar.google.com.au/citations?user=ePIeVuUAAAAJ&hl=en' target='_blank'>Mingyuan Fan</a>&emsp;
+  <a href='https://scholar.google.com/citations?user=HukWSw4AAAAJ&hl=en' target='_blank'>Guibin Chen</a>&emsp;
+  <a href='https://scholar.google.com.tw/citations?user=RvAuMk0AAAAJ&hl=zh-CN' target='_blank'>Xiang Wen</a>&emsp;
 </div>
 
 <div align='center'>
-    <small>Skywork AI </small>
+    <small><strong>Skywork AI</strong></small>
 </div>
 
 <br>
