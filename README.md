@@ -53,7 +53,16 @@ This repo, named **SkyReels-A1**, contains the official PyTorch implementation o
 * Feb 18, 2025: 👋 We release the inference code and model weights of SkyReels-A1. [Download](https://huggingface.co/Skywork/SkyReels-A1)
 * Feb 18, 2025: 🎉 We have made our technical report available as open source. [Read](https://skyworkai.github.io/skyreels-a1.github.io/report.pdf)
 * Feb 18, 2025: 🔥 Our online demo of LipSync is available on SkyReels now! Try out [LipSync](https://www.skyreels.ai/home/tools/lip-sync?refer=navbar).
-* Feb 18, 2025: 🔥 We have open-sourced I2V video generation model [SkyReels-V1](https://github.com/SkyworkAI/SkyReels-V1). This is the first and most advanced open-source human-centric video foundation model. 
+* Feb 18, 2025: 🔥 We have open-sourced I2V video generation model [SkyReels-V1](https://github.com/SkyworkAI/SkyReels-V1). This is the first and most advanced open-source human-centric video foundation model.
+
+## 📑 TODO List
+- [x] Checkpoints
+- [x] Inference Code
+- [x] Web Demo (Gradio)
+- [ ] Audio-driven Portrait Image Animation Pipeline
+- [ ] Inference Code for Long Videos
+- [ ] User-Level GPU Inference on RTX4090
+- [ ] ComfyUI
 
 
 ## Getting Started 🏁 
