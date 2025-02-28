@@ -94,7 +94,7 @@ The FLAME, mediapipe, and smirk models are located in the SkyReels-A1/extra_mode
 
 The directory structure of our SkyReels-A1 code is formulated as: 
 ```text
-pretrained_weights
+pretrained_models
 ├── FLAME
 ├── SkyReels-A1-5B
 │   ├── pose_guider
