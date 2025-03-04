@@ -177,7 +177,7 @@ python pose_score.py
 
 
 ## Acknowledgements 💐
-We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/CogVideo) and [finetrainers](https://github.com/a-r-r-o-w/finetrainers) repositories, for their open research and contributions. 
+We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/CogVideo), [finetrainers](https://github.com/a-r-r-o-w/finetrainers) and [DiffPoseTalk](https://github.com/DiffPoseTalk/DiffPoseTalk)repositories, for their open research and contributions. 
 
 ## Citation 💖
 If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and cite our work using the following BibTeX:
