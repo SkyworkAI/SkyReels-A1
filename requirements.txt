@@ -19,3 +19,4 @@ torch==2.2.2+cu118
 tqdm==4.66.2
 transformers==4.37.2
 mediapipe==0.10.21
+librosa==0.10.2.post1

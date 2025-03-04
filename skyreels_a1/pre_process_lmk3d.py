@@ -225,6 +225,35 @@ class FaceAnimationProcessor:
             driving_outputs_list.extend(np.copy(rendered_img)[np.newaxis, :])
         return driving_outputs_list
 
+    def preprocess_lmk3d_from_coef(self, source_outputs, source_tform, render_shape, driving_outputs):
+        driving_outputs_list = []
+        source_pose_init = source_outputs['pose_params'].clone()
+        driving_outputs_pose = [outputs['pose_params'] for outputs in driving_outputs]
+        driving_outputs_pose = self.smooth_params(driving_outputs_pose)
+        for i, outputs in enumerate(driving_outputs):
+            outputs['pose_params'] = driving_outputs_pose[i]
+            source_outputs['expression_params'] = outputs['expression_params']
+            source_outputs['jaw_params'] = outputs['jaw_params']
+            source_outputs['eye_pose_params'] = outputs['eye_pose_params']
+            source_matrix = self.rodrigues_to_matrix(source_pose_init)
+            driving_matrix_0 = self.rodrigues_to_matrix(driving_outputs[0]['pose_params'])
+            driving_matrix_i = self.rodrigues_to_matrix(driving_outputs[i]['pose_params'])
+            relative_rotation = torch.inverse(driving_matrix_0) @ driving_matrix_i
+            new_rotation = source_matrix @ relative_rotation
+            source_outputs['pose_params'] = self.matrix_to_rodrigues(new_rotation)
+            source_outputs['eyelid_params'] = outputs['eyelid_params']
+            flame_output = self.flame.forward(source_outputs)
+            renderer_output = self.renderer.forward(
+                flame_output['vertices'],
+                source_outputs['cam'],
+                landmarks_fan=flame_output['landmarks_fan'], source_tform=source_tform,
+                tform_512=None, weights_468=None, weights_473=None,
+                landmarks_mp=flame_output['landmarks_mp'], shape=render_shape)
+            rendered_img = renderer_output['rendered_img']
+            driving_outputs_list.extend(np.copy(rendered_img)[np.newaxis, :])
+        return driving_outputs_list
+
+
     def ensure_even_dimensions(self, frame):
         height, width = frame.shape[:2]
         new_width = width - (width % 2)

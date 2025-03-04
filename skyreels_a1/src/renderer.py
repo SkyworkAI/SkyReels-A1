@@ -119,7 +119,12 @@ class Renderer(nn.Module):
             transformed_landmarks[key][:, :, 1:] = - transformed_landmarks[key][:, :, 1:]
             transformed_landmarks[key] = transformed_landmarks[key][...,:2]
 
-        rendered_img = self.render(vertices, transformed_vertices, source_tform, tform_512, weights_468, weights_473,shape)
+        # rendered_img = self.render(vertices, transformed_vertices, source_tform, tform_512, weights_468, weights_473,shape)
+        if weights_468 is None:
+            rendered_img = self.render_with_pulid_in_vertices(vertices, transformed_vertices, source_tform, tform_512, shape)
+        else:
+            rendered_img = self.render(vertices, transformed_vertices, source_tform, tform_512, weights_468, weights_473,shape)
+
         outputs = {
             'rendered_img': rendered_img,
             'transformed_vertices': transformed_vertices
@@ -131,10 +136,72 @@ class Renderer(nn.Module):
     def _calculate_eye_landmarks(self, landmark_list_pixlevel, weights_468, weights_473, source_tform):
         #  [np.array([x_relative, y_relative]),target_point,ref_points] 根据当前的new_landmarks，根据target_point， 利用映射变换，计算出眼部landmarks
        
-       
        import pdb; pdb.set_trace()
        pass
 
+    def render_with_pulid_in_vertices(self, vertices, transformed_vertices, source_tform, tform_512, shape):
+        batch_size = vertices.shape[0]
+        ## rasterizer near 0 far 100. move mesh so minz larger than 0
+        transformed_vertices[:,:,2] = transformed_vertices[:,:,2] + 10
+        # import pdb;pdb.set_trace()
+        # 只使用颜色作为attributes
+        colors = self.face_colors.expand(batch_size, -1, -1, -1)
+
+        # # 加载 mediapipe_landmark_embedding 数据
+        lmk_b_coords = self.mediapipe_landmark_embedding['lmk_b_coords']
+        lmk_face_idx = self.mediapipe_landmark_embedding['lmk_face_idx']
+        # import pdb;pdb.set_trace()
+        # 计算 v_selected
+        v_selected = mesh_points_by_barycentric_coordinates(transformed_vertices.detach().cpu().numpy()[0], self.faces.detach().cpu().numpy()[0], lmk_face_idx, lmk_b_coords)
+        # v_selected 增加对应左眼和右眼的8个位置，序号分别是：[4051, 3997, 3965, 3933, 4020]，[4597, 4543, 4511, 4479, 4575]，得根据transformed_vertices.detach().cpu().numpy()[0]来获取
+        v_selected = np.concatenate([v_selected, transformed_vertices.detach().cpu().numpy()[0][[4543, 4511, 4479, 4575]], transformed_vertices.detach().cpu().numpy()[0][[3997, 3965, 3933, 4020]]], axis=0)
+        
+        v_selected_tensor = torch.tensor( np.array(v_selected), dtype=torch.float32).to(transformed_vertices.device)
+        new_landmarks = landmark_pb2.NormalizedLandmarkList()
+        for v in v_selected_tensor:
+            # 将 v 映射到图像坐标
+            img_x = (v[0] + 1) * 0.5 * self.image_size
+            img_y = ((v[1] + 1) * 0.5) * self.image_size
+            # import pdb;pdb.set_trace()
+            point = np.array([img_x.cpu().numpy(), img_y.cpu().numpy(), 1.0])
+            croped_point = np.dot(source_tform.inverse.params, point)
+            
+            # original_point = np.dot(tform_512.inverse.params, point)
+            landmark = new_landmarks.landmark.add()
+            landmark.x = croped_point[0]/shape[1]
+            landmark.y = croped_point[1]/shape[0]
+            landmark.z = 1.0
+        # 将 v 映射到图像坐标
+        right_eye_x = (transformed_vertices[0,4597,0] + 1) * 0.5 * self.image_size
+        right_eye_y = (transformed_vertices[0,4597,1] + 1) * 0.5 * self.image_size
+        right_eye_point = np.array([right_eye_x.cpu().numpy(), right_eye_y.cpu().numpy(), 1.0])
+        right_eye_original = np.dot(source_tform.inverse.params, right_eye_point)
+        right_eye_landmarks = right_eye_original[:2]
+
+        left_eye_x = (transformed_vertices[0,4051,0] + 1) * 0.5 * self.image_size
+        left_eye_y = (transformed_vertices[0,4051,1] + 1) * 0.5 * self.image_size
+        left_eye_point = np.array([left_eye_x.cpu().numpy(), left_eye_y.cpu().numpy(), 1.0])
+        left_eye_original = np.dot(source_tform.inverse.params, left_eye_point)
+        left_eye_landmarks = left_eye_original[:2]
+
+        image_new = np.zeros([shape[0],shape[1],3], dtype=np.uint8)
+        self.vis.mp_drawing.draw_landmarks(image=image_new,landmark_list=new_landmarks,connections=self.vis.face_connection_spec.keys(),landmark_drawing_spec=None,connection_drawing_spec=self.vis.face_connection_spec)
+        
+        # 直接设置单个像素点的颜色
+        left_point = (int(left_eye_landmarks[0]), int(left_eye_landmarks[1]))
+        right_point = (int(right_eye_landmarks[0]), int(right_eye_landmarks[1]))
+        # import pdb;pdb.set_trace()
+        # 左眼点 - 3x3 区域
+        image_new[left_point[1]-1:left_point[1]+2, left_point[0]-1:left_point[0]+2] = [180, 200, 10]  # RGB格式
+        # 右眼点 - 3x3 区域 
+        image_new[right_point[1]-1:right_point[1]+2, right_point[0]-1:right_point[0]+2] = [10, 200, 180]
+
+        landmark_58 = new_landmarks.landmark[57]  # 因为索引从0开始，所以57表示第58个点
+        x = int(landmark_58.x * shape[1])
+        y = int(landmark_58.y * shape[0])
+        image_new[y-2:y+3, x-2:x+3] = [255, 255, 255]  # 设置3x3的白色区域
+
+        return np.copy(image_new)
 
     def render(self, vertices, transformed_vertices, source_tform, tform_512, weights_468, weights_473, shape):
         # batch_size = vertices.shape[0]

@@ -50,6 +50,7 @@ This repo, named **SkyReels-A1**, contains the official PyTorch implementation o
 
 
 ## 🔥🔥🔥 News!!
+* Mar 4, 2025: 🔥 We release audio-driven portrait image animation pipeline.
 * Feb 18, 2025: 👋 We release the inference code and model weights of SkyReels-A1. [Download](https://huggingface.co/Skywork/SkyReels-A1)
 * Feb 18, 2025: 🎉 We have made our technical report available as open source. [Read](https://skyworkai.github.io/skyreels-a1.github.io/report.pdf)
 * Feb 18, 2025: 🔥 Our online demo of LipSync is available on SkyReels now! Try out [LipSync](https://www.skyreels.ai/home/tools/lip-sync?refer=navbar).
@@ -59,7 +60,7 @@ This repo, named **SkyReels-A1**, contains the official PyTorch implementation o
 - [x] Checkpoints
 - [x] Inference Code
 - [x] Web Demo (Gradio)
-- [ ] Audio-driven Portrait Image Animation Pipeline
+- [x] Audio-driven Portrait Image Animation Pipeline
 - [ ] Inference Code for Long Videos
 - [ ] User-Level GPU Inference on RTX4090
 - [ ] ComfyUI
@@ -109,11 +110,30 @@ pretrained_models
 
 ```
 
+#### Download DiffposeTalk assets
+- oss: oss://aigame-html/reelscraft/storyboard/diffposetalk/
+
+```text
+pretrained_models
+├── FLAME
+├── SkyReels-A1-5B
+├── mediapipe
+├── diffposetalk
+│   ├── style
+│   ├── iter_0110000.pt
+│   ├── states_train.npz
+└── smirk
+
+```
+
 
 ### 3. Inference 🚀
 You can simply run the inference scripts as: 
 ```bash
 python inference.py
+
+# inference audio to video
+python inference_audio.py
 ```
 
 If the script runs successfully, you will get an output mp4 file. This file includes the following results: driving video, input image or video, and generated result.
