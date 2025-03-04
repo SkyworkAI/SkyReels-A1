@@ -110,8 +110,19 @@ pretrained_models
 
 ```
 
-#### Download DiffposeTalk assets
-- oss: oss://aigame-html/reelscraft/storyboard/diffposetalk/
+#### Download DiffposeTalk assets and pretrained weights (For Audio-driven)
+
+- We use [diffposetalk](https://github.com/DiffPoseTalk/DiffPoseTalk/tree/main) to generate flame coefficients from audio, thereby constructing motion signals.
+
+- Download the diffposetalk code and follow its README to download the weights and related data.
+
+- Then place them in the specified directory.
+
+```bash
+cp -r ${diffposetalk_root}/style pretrained_models/diffposetalk
+cp ${diffposetalk_root}/experiments/DPT/head-SA-hubert-WM/checkpoints/iter_0110000.pt pretrained_models/diffposetalk
+cp ${diffposetalk_root}/datasets/HDTF_TFHP/lmdb/stats_train.npz pretrained_models/diffposetalk
+```
 
 ```text
 pretrained_models
