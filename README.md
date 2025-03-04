@@ -132,7 +132,7 @@ pretrained_models
 ├── diffposetalk
 │   ├── style
 │   ├── iter_0110000.pt
-│   ├── states_train.npz
+│   ├── stats_train.npz
 └── smirk
 
 ```
