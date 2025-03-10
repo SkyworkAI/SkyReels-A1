@@ -61,7 +61,7 @@ This repo, named **SkyReels-A1**, contains the official PyTorch implementation o
 - [x] Inference Code
 - [x] Web Demo (Gradio)
 - [x] Audio-driven Portrait Image Animation Pipeline
-- [ ] Inference Code for Long Videos
+- [x] Inference Code for Long Videos
 - [ ] User-Level GPU Inference on RTX4090
 - [ ] ComfyUI
 
