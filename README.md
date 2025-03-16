@@ -160,7 +160,7 @@ python app.py
 
 The graphical interactive interface is shown as below: 
 
-![gradio](https://github.com/user-attachments/assets/ed56f08c-f31c-4fbe-ac1d-c4d4e87a8719)
+![gradio](assets/gradio.png)
 
 
 ## Metric Evaluation 👓

@@ -48,7 +48,7 @@ def write_mp4(video_path, samples, fps=14, audio_bitrate="192k"):
 def init_model(
     model_name: str = "pretrained_models/SkyReels-A1-5B/",
     subfolder: str = "outputs/",
-    siglip_path: str = "pretrained_models/siglip-so400m-patch14-384",
+    siglip_path: str = "pretrained_models/SkyReels-A1-5B/siglip-so400m-patch14-384",
     weight_dtype=torch.bfloat16,
     ):
 
