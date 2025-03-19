@@ -88,7 +88,7 @@ pip install -r requirements.txt
 You can download the pretrained weights is from HuggingFace:
 ```bash
 # !pip install -U "huggingface_hub[cli]"
-huggingface-cli download SkyReels-A1 --local-dir local_path --exclude "*.git*" "README.md" "docs"
+huggingface-cli download Skywork/SkyReels-A1 --local-dir local_path --exclude "*.git*" "README.md" "docs"
 ```
 
 The FLAME, mediapipe, and smirk models are located in the SkyReels-A1/extra_models folder.
