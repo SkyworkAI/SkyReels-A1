@@ -46,7 +46,7 @@
 </p>
 
 
-This repo, named **SkyReels-A1**, contains the official PyTorch implementation of our paper [SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers](https://arxiv.org).
+This repo, named **SkyReels-A1**, contains the official PyTorch implementation of our paper [SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers](https://arxiv.org/abs/2502.10841).
 
 
 ## 🔥🔥🔥 News!!
@@ -137,6 +137,23 @@ pretrained_models
 
 ```
 
+#### Download Frame interpolation Model pretrained weights (For Long Video Inference)
+
+- We use [FILM](https://github.com/dajes/frame-interpolation-pytorch) to generate transition frames, making the video transitions smoother (Set `use_interpolation` to True).
+
+- Download [film_net_fp16.pt](https://github.com/dajes/frame-interpolation-pytorch/releases), and place it in the specified directory.
+
+```text
+pretrained_models
+├── FLAME
+├── SkyReels-A1-5B
+├── mediapipe
+├── diffposetalk
+├── film_net
+│   ├── film_net_fp16.pt
+└── smirk
+```
+
 
 ### 3. Inference 🚀
 You can simply run the inference scripts as: 
@@ -148,6 +165,16 @@ python inference_audio.py
 ```
 
 If the script runs successfully, you will get an output mp4 file. This file includes the following results: driving video, input image or video, and generated result.
+
+#### Long Video Inference
+
+Now, you can run the long video inference scripts to obtain portrait animation of any length：
+```bash
+python inference_long_video.py
+
+# inference audio to video
+python inference_audio_long_video.py
+```
 
 
 ## Gradio Interface 🤗

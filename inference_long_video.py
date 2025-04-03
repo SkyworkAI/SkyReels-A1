@@ -7,14 +7,12 @@ import insightface
 import cv2
 import subprocess
 import argparse
-import math
 import time
 from decord import VideoReader
 from moviepy.editor import ImageSequenceClip, AudioFileClip, VideoFileClip
 from facexlib.parsing import init_parsing_model
 from facexlib.utils.face_restoration_helper import FaceRestoreHelper
 from insightface.app import FaceAnalysis 
-import moviepy.editor as mp
 
 from diffusers.models import AutoencoderKLCogVideoX
 from diffusers.utils import export_to_video, load_image
@@ -29,7 +27,6 @@ from skyreels_a1.src.media_pipe.draw_util_2d import FaceMeshVisualizer2d
 from skyreels_a1.src.frame_interpolation import init_frame_interpolation_model, batch_images_interpolation_tool
 
 from diffusers.video_processor import VideoProcessor
-from diffposetalk.diffposetalk import DiffPoseTalk
 
 
 def crop_and_resize(image, height, width):
@@ -48,19 +45,49 @@ def crop_and_resize(image, height, width):
     return image
 
 
-def pad_video(driving_frames, fps=25):
-    video_length = len(driving_frames)
+def write_mp4(video_path, samples, fps=12, audio_bitrate="192k"):
+    clip = ImageSequenceClip(samples, fps=fps)
+    clip.write_videofile(video_path, audio_codec="aac", audio_bitrate=audio_bitrate, 
+                         ffmpeg_params=["-crf", "18", "-preset", "slow"])
+
+
+def parse_video(driving_video_path, max_frame_num=10000, frame_num_per_batch=49, target_fps=12):
+    vr = VideoReader(driving_video_path)
+    fps = vr.get_avg_fps()
+    video_length = len(vr)
 
     duration = video_length / fps 
-    target_times = np.arange(0, duration, 1/12)
+    target_times = np.arange(0, duration, 1/target_fps)  # 12 fps
     frame_indices = (target_times * fps).astype(np.int32)
 
     frame_indices = frame_indices[frame_indices < video_length]
-    new_driving_frames = []
-    for idx in frame_indices:
-        new_driving_frames.append(driving_frames[idx])
+    control_frames = vr.get_batch(frame_indices).asnumpy()[:max_frame_num]
+    
+    return control_frames
 
-    return new_driving_frames
+
+def exec_cmd(cmd):
+            return subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+
+def add_audio_to_video(silent_video_path, audio_video_path, output_video_path):
+    cmd = [
+        'ffmpeg',
+        '-y',
+        '-i', f'"{silent_video_path}"',
+        '-i', f'"{audio_video_path}"',
+        '-map', '0:v',
+        '-map', '1:a',
+        '-c:v', 'copy',
+        '-shortest',
+        f'"{output_video_path}"'
+    ]
+
+    try:
+        exec_cmd(' '.join(cmd))
+        print(f"Video with audio generated successfully: {output_video_path}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
 
 
 def smooth_video_transition(frames1, frames2, smooth_frame_num, frame_inter_model, inter_frames=2):
@@ -85,28 +112,11 @@ def smooth_video_transition(frames1, frames2, smooth_frame_num, frame_inter_mode
     return out_frames
 
 
-def save_video_with_audio(video_path:str, audio_path: str, save_path: str):
-    video_clip = mp.VideoFileClip(video_path)
-    audio_clip = mp.AudioFileClip(audio_path)
-
-    if audio_clip.duration > video_clip.duration:
-        audio_clip = audio_clip.subclip(0, video_clip.duration)
-
-    video_with_audio = video_clip.set_audio(audio_clip)
- 
-    video_with_audio.write_videofile(save_path, fps=12)
-
-    os.remove(video_path)
-
-    video_clip.close()
-    audio_clip.close()
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process video and image for face animation.")
-    parser.add_argument('--image_path', type=str, default="assets/ref_images/19.png", help='Path to the source image.')
-    parser.add_argument('--driving_audio_path', type=str, default="assets/driving_audio/2.wav", help='Path to the driving video.')
-    parser.add_argument('--output_path', type=str, default="outputs_audio", help='Path to save the output video.')
+    parser.add_argument('--image_path', type=str, default="assets/ref_images/1.png", help='Path to the source image.')
+    parser.add_argument('--driving_video_path', type=str, default="assets/driving_video/6.mp4", help='Path to the driving video.')
+    parser.add_argument('--output_path', type=str, default="outputs", help='Path to save the output video.')
     args = parser.parse_args()
 
     guidance_scale = 3.0
@@ -128,11 +138,9 @@ if __name__ == "__main__":
     processor = FaceAnimationProcessor(checkpoint='pretrained_models/smirk/SMIRK_em1.pt')
     vis = FaceMeshVisualizer2d(forehead_edge=False, draw_head=False, draw_iris=False)
     face_helper = FaceRestoreHelper(upscale_factor=1, face_size=512, crop_ratio=(1, 1), det_model='retinaface_resnet50', save_ext='png', device="cuda") 
+    
     if use_interpolation:
         frame_inter_model = init_frame_interpolation_model('pretrained_models/film_net/film_net_fp16.pt', device="cuda")
-
-    # diffposetalk init
-    diffposetalk = DiffPoseTalk()
 
     # siglip visual encoder
     siglip = SiglipVisionModel.from_pretrained(siglip_name)
@@ -168,6 +176,26 @@ if __name__ == "__main__":
     pipe.enable_model_cpu_offload()
     pipe.vae.enable_tiling()
 
+    control_frames = parse_video(args.driving_video_path, max_frame_num, frame_num_per_batch)
+    
+    # driving video crop face
+    driving_video_crop = []
+    empty_index = []
+    from tqdm import tqdm
+    for i, control_frame in enumerate(tqdm(control_frames, desc="Face crop")):
+        frame, _, _ = processor.face_crop(control_frame)
+        if frame is None:
+            print(f'Warning: No face detected in the driving video frame {i}')
+            empty_index.append(i)
+        else:
+            driving_video_crop.append(frame)
+    
+    control_frames = np.delete(control_frames, empty_index, axis=0)
+
+    video_length = len(driving_video_crop)  # orginal video length
+
+    print(f"orginal video length: {video_length}")
+
     image = load_image(image=args.image_path)
     image = processor.crop_and_resize(image, sample_size[0], sample_size[1])
 
@@ -175,12 +203,8 @@ if __name__ == "__main__":
     ref_image, x1, y1 = processor.face_crop(np.array(image))
     face_h, face_w, _ = ref_image.shape
     source_image = ref_image
-
-    source_outputs, source_tform, image_original = processor.process_source_image(source_image)
-    driving_outputs = diffposetalk.infer_from_file(args.driving_audio_path, source_outputs["shape_params"].view(-1)[:100].detach().cpu().numpy())
-
-    out_frames = processor.preprocess_lmk3d_from_coef(source_outputs, source_tform, image_original.shape, driving_outputs)
-    out_frames = pad_video(out_frames)
+    driving_video = driving_video_crop
+    out_frames = processor.preprocess_lmk3d(source_image, driving_video)
 
     rescale_motions = np.zeros_like(image)[np.newaxis, :].repeat(len(out_frames), axis=0) 
     for ii in range(rescale_motions.shape[0]):
@@ -195,9 +219,6 @@ if __name__ == "__main__":
     first_motion = first_motion[np.newaxis, :]
 
     input_video = rescale_motions[:max_frame_num]
-
-    video_length = len(input_video)
-    print(f"orginal video length: {video_length}")
 
     face_helper.clean_all() 
     face_helper.read_image(np.array(image)[:, :, ::-1])
@@ -231,7 +252,7 @@ if __name__ == "__main__":
             print(f"padding_frame_num: {padding_frame_num}")
             input_video = torch.cat([input_video, torch.repeat_interleave(input_video[:, :, -1].unsqueeze(2), padding_frame_num, dim=2)], dim=2)
         
-        input_video = torch.cat([first_motion, input_video[:, :, 0:1], input_video], dim=2)
+        input_video = torch.cat([first_motion, input_video], dim=2)
 
         with torch.no_grad():
             sample, latents_cache = pipe(
@@ -272,11 +293,28 @@ if __name__ == "__main__":
     time_end = time.time()
     print(f"time cost: {time_end - time_start} seconds")
 
-    save_path_name = os.path.basename(args.image_path).split(".")[0] + "-" + os.path.basename(args.driving_audio_path).split(".")[0]+ ".mp4"
+    save_path_name = os.path.basename(args.image_path).split(".")[0] + "-" + os.path.basename(args.driving_video_path).split(".")[0]+ ".mp4"
 
     if not os.path.exists(save_path):
         os.makedirs(save_path, exist_ok=True)
-    video_path = os.path.join(save_path, save_path_name)
-
+    video_path = os.path.join(save_path, save_path_name + "-output.mp4")
     export_to_video(out_samples, video_path, fps=12)
-    save_video_with_audio(video_path, args.driving_audio_path, video_path + ".audio.mp4")
+
+    target_h, target_w = sample_size[0], sample_size[1]
+    final_images = []
+    for q in range(len(out_samples)):
+        frame1 = image
+        frame2 = crop_and_resize(Image.fromarray(np.array(control_frames[q])).convert("RGB"), target_h, target_w)
+        frame3 = Image.fromarray(np.array(out_samples[q])).convert("RGB")
+
+        result = Image.new('RGB', (target_w * 3, target_h))
+        result.paste(frame1, (0, 0))
+        result.paste(frame2, (target_w, 0))
+        result.paste(frame3, (target_w * 2, 0))
+        final_images.append(np.array(result))
+      
+    video_out_path = os.path.join(save_path, save_path_name)
+    write_mp4(video_out_path, final_images, fps=12)
+        
+    add_audio_to_video(video_out_path, args.driving_video_path, video_out_path + f".audio_{frame_num_per_batch}_{overlap_frame_num}.mp4")
+    add_audio_to_video(video_path, args.driving_video_path, video_path + f".audio_{frame_num_per_batch}_{overlap_frame_num}.mp4")
