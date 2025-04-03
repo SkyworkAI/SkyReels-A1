@@ -288,7 +288,7 @@ if __name__ == "__main__":
     if padding_frame_num is not None:
         out_samples = out_samples[:-padding_frame_num]
     
-    print(f"Output video length: {len(out_samples)}")
+    print(f"output video length: {len(out_samples)}")
     
     time_end = time.time()
     print(f"time cost: {time_end - time_start} seconds")
