@@ -137,7 +137,7 @@ pretrained_models
 
 ```
 
-#### Download Frame interpolation Model pretrained weights (For Long Videos Inference)
+#### Download Frame interpolation Model pretrained weights (For Long Video Inference)
 
 - We use [FILM](https://github.com/dajes/frame-interpolation-pytorch) to generate transition frames, making the video transitions smoother (Set `use_interpolation` to True).
 
@@ -166,7 +166,7 @@ python inference_audio.py
 
 If the script runs successfully, you will get an output mp4 file. This file includes the following results: driving video, input image or video, and generated result.
 
-#### Long Videos Inference
+#### Long Video Inference
 
 Now, you can run the long video inference scripts to obtain portrait animation of any length：
 ```bash
