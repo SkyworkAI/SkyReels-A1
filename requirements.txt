@@ -6,7 +6,7 @@ facexlib==0.3.0
 gradio==5.16.0
 insightface==0.7.3
 moviepy==1.0.3
-numpy==2.2.2
+numpy==1.26.4
 opencv_contrib_python==4.10.0.84
 opencv_python==4.10.0.84
 opencv_python_headless==4.10.0.84
@@ -20,3 +20,9 @@ tqdm==4.66.2
 transformers==4.37.2
 mediapipe==0.10.21
 librosa==0.10.2.post1
+onnxruntime-gpu==1.16.3
+accelerate==1.6.0
+
+# if torch or pytorch3d installation fails, try:
+# pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 --index-url https://download.pytorch.org/whl/cu118
+# pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"
