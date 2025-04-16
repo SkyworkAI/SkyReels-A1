@@ -138,7 +138,7 @@ pretrained_models
 
 ```
 
-#### Download Frame interpolation Model pretrained weights (For Long Video Inference)
+#### Download Frame interpolation Model pretrained weights (For Long Video Inference and Dynamic Resolution)
 
 - We use [FILM](https://github.com/dajes/frame-interpolation-pytorch) to generate transition frames, making the video transitions smoother (Set `use_interpolation` to True).
 
@@ -176,6 +176,10 @@ python inference_long_video.py
 # inference audio to video
 python inference_audio_long_video.py
 ```
+
+#### Dynamic Resolution
+
+All inference scripts now support dynamic resolution, simply set `target_fps` to any desired fps, recommended fps include: 12fps (Native), 24fps, 48fps, 60fps, other settings such as 25fps and 30fps may cause unstable frame rates. 
 
 
 ## Gradio Interface 🤗
@@ -217,6 +221,3 @@ If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and 
   year={2025}
 }
 ```
-
-
-

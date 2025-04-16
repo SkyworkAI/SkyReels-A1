@@ -2,3 +2,4 @@ pretrained_models/
 __pycache__/
 .gradio/
 outputs/
+outputs_audio/
