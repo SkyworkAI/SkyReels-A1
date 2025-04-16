@@ -23,6 +23,8 @@ from skyreels_a1.skyreels_a1_i2v_pipeline import SkyReelsA1ImagePoseToVideoPipel
 from skyreels_a1.pre_process_lmk3d import FaceAnimationProcessor
 from skyreels_a1.src.media_pipe.mp_utils  import LMKExtractor
 from skyreels_a1.src.media_pipe.draw_util_2d import FaceMeshVisualizer2d
+from skyreels_a1.src.frame_interpolation import init_frame_interpolation_model, batch_images_interpolation_tool
+from skyreels_a1.src.multi_fps import multi_fps_tool
 
 import moviepy.editor as mp
 from diffposetalk.diffposetalk import DiffPoseTalk
@@ -68,22 +70,27 @@ def parse_video(driving_frames, max_frame_num, fps=25):
     new_driving_frames = [new_driving_frames[0]]*2 + new_driving_frames[1:len(new_driving_frames)-1] + [new_driving_frames[-1]] * video_lenght_add
     return new_driving_frames
 
+def exec_cmd(cmd):
+            return subprocess.run(cmd, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-def save_video_with_audio(video_path:str, audio_path: str, save_path: str):
-    video_clip = mp.VideoFileClip(video_path)
-    audio_clip = mp.AudioFileClip(audio_path)
+def add_audio_to_video(silent_video_path, audio_video_path, output_video_path):
+    cmd = [
+        'ffmpeg',
+        '-y',
+        '-i', f'"{silent_video_path}"',
+        '-i', f'"{audio_video_path}"',
+        '-map', '0:v',
+        '-map', '1:a',
+        '-c:v', 'copy',
+        '-shortest',
+        f'"{output_video_path}"'
+    ]
 
-    if audio_clip.duration > video_clip.duration:
-        audio_clip = audio_clip.subclip(0, video_clip.duration)
-
-    video_with_audio = video_clip.set_audio(audio_clip)
- 
-    video_with_audio.write_videofile(save_path, fps=12)
-
-    os.remove(video_path)
-
-    video_clip.close()
-    audio_clip.close()
+    try:
+        exec_cmd(' '.join(cmd))
+        print(f"Video with audio generated successfully: {output_video_path}")
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process video and image for face animation.")
@@ -97,6 +104,7 @@ if __name__ == "__main__":
     num_inference_steps = 10
     sample_size = [480, 720]
     max_frame_num = 49
+    target_fps = 12  # recommend fps: 12(Native), 24, 36, 48, 60, other fps like 25, 30 may cause unstable rates
     weight_dtype = torch.bfloat16
     save_path = args.output_path
     generator = torch.Generator(device="cuda").manual_seed(seed)
@@ -111,6 +119,10 @@ if __name__ == "__main__":
     # siglip visual encoder
     siglip = SiglipVisionModel.from_pretrained(siglip_name)
     siglip_normalize = SiglipImageProcessor.from_pretrained(siglip_name)
+    
+    # frame interpolation model
+    if target_fps != 12:
+        frame_inter_model = init_frame_interpolation_model('pretrained_models/film_net/film_net_fp16.pt', device="cuda")
 
     # diffposetalk
     diffposetalk = DiffPoseTalk()
@@ -210,25 +222,31 @@ if __name__ == "__main__":
 
     if not os.path.exists(save_path):
         os.makedirs(save_path, exist_ok=True)
-    video_path = os.path.join(save_path, save_path_name + ".output.mp4")
-    export_to_video(out_samples, video_path, fps=12)
-    target_h, target_w = sample_size[0], sample_size[1]
-    final_images = []
-    final_images2 =[]
-    rescale_motions = rescale_motions[1:]
-    control_frames = out_frames[1:]
-    for q in range(len(out_samples)):
-        frame1 = image
-        frame2 = Image.fromarray(np.array(out_samples[q])).convert("RGB")
+    video_path = os.path.join(save_path, save_path_name.split(".")[0] + "_output.mp4")
 
-        result = Image.new('RGB', (target_w * 2, target_h))
-        result.paste(frame1, (0, 0))
-        result.paste(frame2, (target_w, 0))
-        final_images.append(np.array(result))
-      
-    video_out_path = os.path.join(save_path, save_path_name)
-    write_mp4(video_out_path, final_images, fps=12)
+    if target_fps != 12:
+        out_samples = multi_fps_tool(out_samples, frame_inter_model, target_fps)
+    
+    export_to_video(out_samples, video_path, fps=target_fps)
+    add_audio_to_video(video_path, args.driving_audio_path, video_path.split(".")[0] + "_audio.mp4")
 
-    save_video_with_audio(video_out_path, args.driving_audio_path, video_out_path + ".audio.mp4")
-    save_video_with_audio(video_path, args.driving_audio_path, video_path + ".audio.mp4")
+    if target_fps == 12:
+        target_h, target_w = sample_size[0], sample_size[1]
+        final_images = []
+        final_images2 =[]
+        rescale_motions = rescale_motions[1:]
+        control_frames = out_frames[1:]
+        for q in range(len(out_samples)):
+            frame1 = image
+            frame2 = Image.fromarray(np.array(out_samples[q])).convert("RGB")
+
+            result = Image.new('RGB', (target_w * 2, target_h))
+            result.paste(frame1, (0, 0))
+            result.paste(frame2, (target_w, 0))
+            final_images.append(np.array(result))
+        
+        video_out_path = os.path.join(save_path, save_path_name.split(".")[0]+"_merge.mp4")
+        write_mp4(video_out_path, final_images, fps=12)
+
+        add_audio_to_video(video_out_path, args.driving_audio_path, video_out_path.split(".")[0] + "_audio.mp4")
         
