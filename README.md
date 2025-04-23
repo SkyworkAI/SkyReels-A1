@@ -221,3 +221,10 @@ If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and 
   year={2025}
 }
 ```
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=SkyworkAI/SkyReels-A1&type=Date)](https://www.star-history.com/#SkyworkAI/SkyReels-A1&Date)
+
+
+
