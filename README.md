@@ -215,7 +215,7 @@ We would like to thank the contributors of [CogvideoX](https://github.com/THUDM/
 If you find SkyReels-A1 useful for your research, welcome to 🌟 this repo and cite our work using the following BibTeX:
 ```bibtex
 @article{qiu2025skyreels,
-  title={SkyReels-A1: Expressive Portrait Animation in Video Diffusion Transformers},
+  title={Skyreels-a1: Expressive portrait animation in video diffusion transformers},
   author={Qiu, Di and Fei, Zhengcong and Wang, Rui and Bai, Jialin and Yu, Changqian and Fan, Mingyuan and Chen, Guibin and Wen, Xiang},
   journal={arXiv preprint arXiv:2502.10841},
   year={2025}
