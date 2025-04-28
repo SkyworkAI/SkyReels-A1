@@ -125,6 +125,8 @@ cp ${diffposetalk_root}/experiments/DPT/head-SA-hubert-WM/checkpoints/iter_01100
 cp ${diffposetalk_root}/datasets/HDTF_TFHP/lmdb/stats_train.npz pretrained_models/diffposetalk
 ```
 
+- Or you can download style files from [link](https://drive.google.com/file/d/1XT426b-jt7RUkRTYsjGvG-wS4Jed2U1T/view?usp=sharing) and stats_train.npz from [link](https://drive.google.com/file/d/1_I5XRzkMP7xULCSGVuaN8q1Upplth9xR/view?usp=sharing).
+
 ```text
 pretrained_models
 ├── FLAME
